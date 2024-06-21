@@ -2,7 +2,8 @@ import strawberry
 from typing import List
 import random
 from typing import Optional
- 
+from services.ads import delete_ads_service, update_ads_service, create_ads_service, get_adsbyId_service, get_adsList_service
+from repository.ads import update_applyVaccine_repo, create_ads_repo, get_adsById_repo,get_ads_counts_repo, get_adsList_repo, get_adsList_repo_graphql
 
 @strawberry.type
 class TodoType:
@@ -49,6 +50,17 @@ class Query:
     @strawberry.field(name="helloWorldSimon", description="Hola Mundo es lo que retorna")
     def hello(self) -> str:
         return "Hola mundo"
+
+    @strawberry.field(name="findAll", description="Regresa puros []")
+    def findAll(self) -> List[str]:
+        cursor = get_adsList_repo(1000, 0)
+        result = [ad['title'] for ad in cursor]  # Corrected syntax
+        
+        print("----------result--------")
+        print(result)
+        #titles = [ad.title for ad in lista2]
+        #return get_adsList_repo(100, 0)
+        return result
  
 
 

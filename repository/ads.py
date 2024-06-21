@@ -5,10 +5,18 @@ from config.mongodb import mongo
 from bson import ObjectId
 from models.ads import AdsModels
 from helps.utils import validar_object_id
+from typing import List
+
 
 def create_ads_repo(obj:AdsModels):
     return mongo.db.ads.insert_one(obj).inserted_id
 
+
+def get_adsList_repo_graphql(limit: int, offset: int) -> List[AdsModels]:
+    query = {'status': {'$in': [True, 'True']}}
+    cursor = mongo.db.ads.find(query).skip(offset).limit(limit)
+    ads_list = [AdsModels(ad['title'], ad['img'], ad['link'], ad['status']) for ad in cursor]
+    return ads_list
 
 
 def get_adsList_repo(limite:int, desde:int):

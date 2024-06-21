@@ -8,6 +8,7 @@ from flaskr.strawberrygraphql import schema
 from flask_jwt_extended import JWTManager
 from routes import blueprint
 
+
 # Cargar las variables de entorno desde el archivo .env
 
 load_dotenv()
@@ -24,7 +25,13 @@ def create_app(test_config=None):
     app.config["JWT_SECRET_KEY"] = os.getenv('JWT_SECRET')
     jwt = JWTManager(app)
     mongo.init_app(app)
-    app.register_blueprint(blueprint)   
+    app.register_blueprint(blueprint)  
+
+    
+    
+
+    
+
     app.config.from_mapping(
         SECRET_KEY='dev',
         DATABASE=os.path.join(app.instance_path, 'flaskr.sqlite'),
