@@ -1,5 +1,7 @@
 import strawberry
 from typing import List
+import random
+from typing import Optional
  
 
 @strawberry.type
@@ -20,6 +22,10 @@ class User:
     age: int
 
 @strawberry.type
+class Hello:
+    name: str
+
+@strawberry.type
 class Query:
     @strawberry.field
     def todos(self, info, done: bool = None) -> List[TodoType]:
@@ -28,10 +34,21 @@ class Query:
         else:
             return todos
     
-    
+    @strawberry.field(name="randomFromZeroTo", description="From zero to argument TO (default 6)")
+    def get_random_from_zero_to(self, to: Optional[int] = 6) -> int:
+        return random.randint(0, to)
+
     @strawberry.field
     def user(self) -> User:
         return User(name="Patrick", age=100)
+
+    @strawberry.field
+    def helloWorld(self) -> Hello:
+        return Hello(name="Hola mundo")
+
+    @strawberry.field(name="helloWorldSimon", description="Hola Mundo es lo que retorna")
+    def hello(self) -> str:
+        return "Hola mundo"
  
 
 

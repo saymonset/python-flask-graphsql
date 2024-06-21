@@ -18,8 +18,6 @@ def create_app(test_config=None):
 
     # create and configure the app
     app = Flask(__name__, instance_relative_config=True)
-    print("------habilitamos cors------------------------")
-    print(os.getenv('SAYMON'))
     CORS(app, resources={r"/api/*": {"origins": "*"}})  # Ajusta según tus rutas y necesidades
     app.config['MONGO_URI'] = os.getenv('MONGO_URI')
     app.config['RESTPLUS_MASK_SWAGGER'] = False
