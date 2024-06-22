@@ -32,8 +32,6 @@ def create_ads_service(data):
  
 
 
-"""Obtiene las vacunas"""
-
 
 def get_adsList_service(limite, desde):
     limite = int(limite)
@@ -49,7 +47,7 @@ def get_adsList_service(limite, desde):
     }
     return jsonify((diccionario))
 
-"""Obtener una Vacuna"""
+"""Obtener una ads"""
 
 
 def get_adsbyId_service(id):

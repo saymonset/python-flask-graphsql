@@ -1,21 +1,18 @@
 import strawberry
-from typing import List
+from typing import List, Optional
+
 import random
 from typing import Optional
-from services.ads import delete_ads_service, update_ads_service, create_ads_service, get_adsbyId_service, get_adsList_service
-from repository.ads import update_applyVaccine_repo, create_ads_repo, get_adsById_repo,get_ads_counts_repo, get_adsList_repo
+from services.ads_graphql import get_adsList_GRPHQLservice, get_adsbyId_GRPHQL_service
+
+from models.ads import AdsModels
 
 @strawberry.type
 class TodoType:
     name: str
     done: bool
 
-@strawberry.type
-class AdsModels:
-    title:str
-    img:str
-    link:str
-    status:bool 
+
                   
      
 todos = [
@@ -60,18 +57,13 @@ class Query:
 
     @strawberry.field(name="findAll", description="Regresa puros []")
     def findAll(self) -> List[str]:
-        cursor = get_adsList_repo(1000, 0)
+        cursor = get_adsList_GRPHQLservice(1000, 0)
         result = [ad['title'] for ad in cursor]  # Corrected syntax
-        
-        print("----------result--------")
-        print(result)
-        #titles = [ad.title for ad in lista2]
-        #return get_adsList_repo(100, 0)
         return result
 
     @strawberry.field(name="findAllObj", description="Regresa puros []")
     def findAllObj(self) -> List[AdsModels]:
-        data = get_adsList_repo(1000, 0)
+        data = get_adsList_GRPHQLservice(1000, 0)
         ads_list = []  # Initialize an empty list for the modified objects 
         for d in data:
             title = d['title']
@@ -81,8 +73,17 @@ class Query:
             ads_list.append(AdsModels(title=title, img=img, link=link, status=status))  # Initialize AdsModels with named arguments
 
         return ads_list
- 
 
+    @strawberry.field(name="findOne", description="Uno solo")
+    def findOne(self, id: str) -> AdsModels:
+        d = get_adsbyId_GRPHQL_service(id)
+        title = d['title']
+        img = d['img']
+        link = d['link']
+        status = d['status']
+        return AdsModels(title=title, img=img, link=link, status=status)
+ 
+#get_adsbyId_GRPHQL_service
 
  
     
