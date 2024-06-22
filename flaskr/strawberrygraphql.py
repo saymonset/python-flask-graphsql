@@ -3,13 +3,20 @@ from typing import List
 import random
 from typing import Optional
 from services.ads import delete_ads_service, update_ads_service, create_ads_service, get_adsbyId_service, get_adsList_service
-from repository.ads import update_applyVaccine_repo, create_ads_repo, get_adsById_repo,get_ads_counts_repo, get_adsList_repo, get_adsList_repo_graphql
+from repository.ads import update_applyVaccine_repo, create_ads_repo, get_adsById_repo,get_ads_counts_repo, get_adsList_repo
 
 @strawberry.type
 class TodoType:
     name: str
     done: bool
-    
+
+@strawberry.type
+class AdsModels:
+    title:str
+    img:str
+    link:str
+    status:bool 
+                  
      
 todos = [
   TodoType(name="Todo #1", done=False),
@@ -61,6 +68,19 @@ class Query:
         #titles = [ad.title for ad in lista2]
         #return get_adsList_repo(100, 0)
         return result
+
+    @strawberry.field(name="findAllObj", description="Regresa puros []")
+    def findAllObj(self) -> List[AdsModels]:
+        data = get_adsList_repo(1000, 0)
+        ads_list = []  # Initialize an empty list for the modified objects 
+        for d in data:
+            title = d['title']
+            img = d['img']
+            link = d['link']
+            status = d['status']
+            ads_list.append(AdsModels(title=title, img=img, link=link, status=status))  # Initialize AdsModels with named arguments
+
+        return ads_list
  
 
 

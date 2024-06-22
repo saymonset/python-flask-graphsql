@@ -1,4 +1,5 @@
 import json
+ 
 class AdsModels:
     def __init__(self, 
                  title:str, 
