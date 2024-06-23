@@ -3,7 +3,8 @@ from typing import List, Optional
 
 import random
 from typing import Optional
-from services.ads_graphql_srv import get_adsList_GRPHQLservice, get_adsbyId_GRPHQL_service, create_ads_GRAPHQL_service
+from services.ads_graphql_srv import get_adsList_GRPHQLservice, get_adsbyId_GRPHQL_service, create_ads_GRAPHQL_service \
+UpdateAdsInput
 from dto.inputs.create_ads_input import CreateAdsInput
 from models.ads import AdsModels
 
@@ -90,7 +91,10 @@ class Query:
 class Mutation:
     @strawberry.mutation(name="createAds", description="Crea ads")
     def create_AdsModels(self, input: CreateAdsInput) -> AdsModels:
-        print(f"Adding {input}")
+        return create_ads_GRAPHQL_service(input)
+
+    @strawberry.mutation(name="updateAds", description="Update ads")
+    def update_AdsModels(self, input: UpdateAdsInput) -> AdsModels:
         return create_ads_GRAPHQL_service(input)
  
     
