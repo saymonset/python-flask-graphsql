@@ -1,8 +1,7 @@
-import json
 import strawberry
-from typing import List
-@strawberry.type
-class AdsModels:
+
+@strawberry.input
+class CreateAdsInput:
     title:str
     img:str
     link:str

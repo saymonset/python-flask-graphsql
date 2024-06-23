@@ -8,8 +8,14 @@ from helps.utils import validar_object_id
 from typing import List
 
 
-def create_ads_repo(obj:AdsModels):
-    return mongo.db.ads.insert_one(obj).inserted_id
+def create_ads_repo(obj: AdsModels):
+    data = {
+        "title": obj.title,
+        "img": obj.img,
+        "link": obj.link,
+        "status": obj.status
+    }
+    return mongo.db.ads.insert_one(data).inserted_id
 
  
 
