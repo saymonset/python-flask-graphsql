@@ -3,9 +3,10 @@ from typing import List, Optional
 
 import random
 from typing import Optional
-from services.ads_graphql_srv import get_adsList_GRPHQLservice, get_adsbyId_GRPHQL_service, create_ads_GRAPHQL_service \
-UpdateAdsInput
+from services.ads_graphql_srv import get_adsList_GRPHQLservice, get_adsbyId_GRPHQL_service, \
+delete_ads_GRAPHQL_service, create_ads_GRAPHQL_service, update_ads_GRAPHQL_service
 from dto.inputs.create_ads_input import CreateAdsInput
+from dto.inputs.update_ads_input import  UpdateAdsInput
 from models.ads import AdsModels
 
 @strawberry.type
@@ -34,56 +35,58 @@ class Hello:
 
 @strawberry.type
 class Query:
-    @strawberry.field
-    def todos(self, info, done: bool = None) -> List[TodoType]:
-        if done is not None:
-            return filter(lambda todo: todo.done == done, todos)
-        else:
-            return todos
+    # @strawberry.field
+    # def todos(self, info, done: bool = None) -> List[TodoType]:
+    #     if done is not None:
+    #         return filter(lambda todo: todo.done == done, todos)
+    #     else:
+    #         return todos
     
-    @strawberry.field(name="randomFromZeroTo", description="From zero to argument TO (default 6)")
-    def get_random_from_zero_to(self, to: Optional[int] = 6) -> int:
-        return random.randint(0, to)
+    # @strawberry.field(name="randomFromZeroTo", description="From zero to argument TO (default 6)")
+    # def get_random_from_zero_to(self, to: Optional[int] = 6) -> int:
+    #     return random.randint(0, to)
 
-    @strawberry.field
-    def user(self) -> User:
-        return User(name="Patrick", age=100)
+    # @strawberry.field
+    # def user(self) -> User:
+    #     return User(name="Patrick", age=100)
 
-    @strawberry.field
-    def helloWorld(self) -> Hello:
-        return Hello(name="Hola mundo")
+    # @strawberry.field
+    # def helloWorld(self) -> Hello:
+    #     return Hello(name="Hola mundo")
 
-    @strawberry.field(name="helloWorldSimon", description="Hola Mundo es lo que retorna")
-    def hello(self) -> str:
-        return "Hola mundo"
+    # @strawberry.field(name="helloWorldSimon", description="Hola Mundo es lo que retorna")
+    # def hello(self) -> str:
+    #     return "Hola mundo"
 
-    @strawberry.field(name="findAll", description="Regresa puros []")
-    def findAll(self) -> List[str]:
-        cursor = get_adsList_GRPHQLservice(1000, 0)
-        result = [ad['title'] for ad in cursor]  # Corrected syntax
-        return result
+    # @strawberry.field(name="findAll", description="Regresa puros []")
+    # def findAll(self) -> List[str]:
+    #     cursor = get_adsList_GRPHQLservice(1000, 0)
+    #     result = [ad['title'] for ad in cursor]  # Corrected syntax
+    #     return result
 
     @strawberry.field(name="findAllObj", description="Regresa puros []")
     def findAllObj(self) -> List[AdsModels]:
         data = get_adsList_GRPHQLservice(1000, 0)
         ads_list = []  # Initialize an empty list for the modified objects 
         for d in data:
+            id = d['_id']
             title = d['title']
             img = d['img']
             link = d['link']
             status = d['status']
-            ads_list.append(AdsModels(title=title, img=img, link=link, status=status))  # Initialize AdsModels with named arguments
+            ads_list.append(AdsModels(id =  id, title=title, img=img, link=link, status=status))  # Initialize AdsModels with named arguments
 
         return ads_list
 
     @strawberry.field(name="findOne", description="Uno solo")
     def findOne(self, id: str) -> AdsModels:
         d = get_adsbyId_GRPHQL_service(id)
+        id = d['_id']
         title = d['title']
         img = d['img']
         link = d['link']
         status = d['status']
-        return AdsModels(title=title, img=img, link=link, status=status)
+        return AdsModels(id = id, title=title, img=img, link=link, status=status)
  
 #get_adsbyId_GRPHQL_service
 
@@ -95,7 +98,11 @@ class Mutation:
 
     @strawberry.mutation(name="updateAds", description="Update ads")
     def update_AdsModels(self, input: UpdateAdsInput) -> AdsModels:
-        return create_ads_GRAPHQL_service(input)
+        return update_ads_GRAPHQL_service(input)
+
+    @strawberry.mutation(name="removeAds", description="Remove ads")
+    def remove_AdsModels(self, idAds: str) -> bool:
+        return delete_ads_GRAPHQL_service(idAds)
  
     
 schema = strawberry.Schema(query=Query, mutation=Mutation)
