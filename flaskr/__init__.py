@@ -4,7 +4,7 @@ from flask_cors import CORS
 from config.mongodb import mongo
 from flask import Flask
 from strawberry.flask.views import  GraphQLView
-from flaskr.strawberrygraphql import schema  
+from graphql_l.ads.strawberrygraphql import schema  
 from flask_jwt_extended import JWTManager
 from routes import blueprint
 
