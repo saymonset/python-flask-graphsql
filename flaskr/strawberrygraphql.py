@@ -3,10 +3,11 @@ from typing import List, Optional
 
 import random
 from typing import Optional
-from services.ads_graphql_srv import get_adsList_GRPHQLservice, get_adsbyId_GRPHQL_service, \
+from services.ads_graphql_srv import get_adsList_GRPHQLservice, get_adsList_GRPHQL_Statusservice, get_adsbyId_GRPHQL_service, \
 delete_ads_GRAPHQL_service, create_ads_GRAPHQL_service, update_ads_GRAPHQL_service
 from dto.inputs.create_ads_input import CreateAdsInput
 from dto.inputs.update_ads_input import  UpdateAdsInput
+from dto.args.status_args import  StatusASrgs
 from models.ads import AdsModels
 
 @strawberry.type
@@ -63,6 +64,20 @@ class Query:
     #     cursor = get_adsList_GRPHQLservice(1000, 0)
     #     result = [ad['title'] for ad in cursor]  # Corrected syntax
     #     return result
+
+    @strawberry.field(name="findAll", description="Regresa puros []")
+    def findAll(self, statusArgs: StatusASrgs = None) -> List[AdsModels]:
+        data = get_adsList_GRPHQL_Statusservice(statusArgs)
+        ads_list = []  # Initialize an empty list for the modified objects 
+        for d in data:
+            id = d['_id']
+            title = d['title']
+            img = d['img']
+            link = d['link']
+            status = d['status']
+            ads_list.append(AdsModels(id =  id, title=title, img=img, link=link, status=status))  # Initialize AdsModels with named arguments
+
+        return ads_list
 
     @strawberry.field(name="findAllObj", description="Regresa puros []")
     def findAllObj(self) -> List[AdsModels]:

@@ -6,7 +6,7 @@ from bson import ObjectId
 from models.ads import AdsModels
 from helps.utils import validar_object_id
 from typing import List
-
+from dto.args.status_args import  StatusASrgs
 
 def create_ads_repo(obj: AdsModels):
     data = {
@@ -37,6 +37,15 @@ def update_applyVaccine_repo(id:str, obj: AdsModels):
         return result
  
 
+
+def get_adsList_status_repo(statusArgs: StatusASrgs):
+    if statusArgs is None:
+        return mongo.db.ads.find() 
+    else :
+        query = {'status': {'$in': [ statusArgs.status]}}
+        return mongo.db.ads.find(query) 
+    
+    
 
 def get_adsList_repo(limite:int, desde:int):
     query = {'status': {'$in': [True, 'True']}}

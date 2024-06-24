@@ -7,13 +7,18 @@ from models.ads import  AdsModels
 from services.vacc import  get_vaccine_service 
 from repository.ads import update_applyVaccine_repo, create_ads_repo, get_adsById_repo,get_ads_counts_repo
 from repository.ads import delete_ads_repo, get_adsById_repo, find_one_applyVaccine_repo, get_adsList_repo, \
-get_adsById_repo
+get_adsById_repo, get_adsList_status_repo
 from repository.vacc import  get_vaccine_repo
 from helps.utils import validar_object_id
 from dto.inputs.create_ads_input import CreateAdsInput
 from dto.inputs.update_ads_input import UpdateAdsInput
 from models.ads import AdsModels
+from dto.args.status_args import  StatusASrgs
  
+"""Obtiene las ads"""
+def get_adsList_GRPHQL_Statusservice(statusArgs: StatusASrgs):
+    return get_adsList_status_repo(statusArgs)
+
 """Obtiene las ads"""
 def get_adsList_GRPHQLservice(limite, desde):
     return get_adsList_repo(limite, desde)
