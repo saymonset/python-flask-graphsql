@@ -162,4 +162,4 @@ class Mutation:
         return delete_ads_GRAPHQL_service(id)
  
     
-schema = strawberry.Schema(query=Query, mutation=Mutation)
+schemaAds = strawberry.Schema(query=Query, mutation=Mutation)
