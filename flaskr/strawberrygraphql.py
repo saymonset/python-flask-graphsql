@@ -136,7 +136,7 @@ class Query:
    
 
     @strawberry.field(name="findOne", description="Uno solo")
-    def findOne(self, id: str) -> AdsModels:
+    def findOne(self, id: strawberry.ID) -> AdsModels:
         d = get_adsbyId_GRPHQL_service(id)
         id = d['_id']
         title = d['title']

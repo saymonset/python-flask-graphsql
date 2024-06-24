@@ -7,8 +7,17 @@ source venv/bin/activate
 #Instalamos los requerimientos
  pip3 install -r requirements.txt 
 
+
+
+#dev
+Copiar el ```env.template``` y renombrar a ```.env```
+
 #Arrancamos la aplicacion
 flask --app flaskr run --debug --port 8000
+
+```
+localhost:8000/graphql
+```
 
 
 #--------------otros----------
