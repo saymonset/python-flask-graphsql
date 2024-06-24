@@ -7,7 +7,7 @@ from models.ads import  AdsModels
 from services.vacc import  get_vaccine_service 
 from repository.ads import update_applyVaccine_repo, create_ads_repo, get_adsById_repo,get_ads_counts_repo
 from repository.ads import delete_ads_repo, get_adsById_repo, find_one_applyVaccine_repo, get_adsList_repo, \
-get_adsById_repo, get_adsList_status_repo
+get_adsById_repo, get_adsList_status_repo, get_ads_totales_counts_repo, get_ads_totales_counts_repo, get_ads_deletes_counts_repo
 from repository.vacc import  get_vaccine_repo
 from helps.utils import validar_object_id
 from dto.inputs.create_ads_input import CreateAdsInput
@@ -22,6 +22,18 @@ def get_adsList_GRPHQL_Statusservice(statusArgs: StatusASrgs):
 """Obtiene las ads"""
 def get_adsList_GRPHQLservice(limite, desde):
     return get_adsList_repo(limite, desde)
+
+"""Obtiene los totales"""
+def get_totalads_GRPHQLservice():
+    return get_ads_totales_counts_repo()
+
+"""Obtiene los activos"""
+def get_totalActivosads_GRPHQLservice():
+    return get_ads_counts_repo()
+
+"""Obtiene los deletes"""
+def get_totalDeletessads_GRPHQLservice():
+    return get_ads_deletes_counts_repo()
 
 
 """Obtener una ads"""
@@ -48,9 +60,9 @@ def update_ads_GRAPHQL_service(data:UpdateAdsInput):
         return AdsModels(title=data.title, img=data.img, link=data.link, status=data.status)
 
 def delete_ads_GRAPHQL_service(id:str):
-       # data['status'] = True
+        #Si existre , no da error
         response = get_adsById_repo(id)
-        print(response)
+        #Lo puedes borrar , lo borramos
         responseII = delete_ads_repo(id)
         print(responseII)
         return True

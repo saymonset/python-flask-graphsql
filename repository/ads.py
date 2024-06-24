@@ -55,6 +55,13 @@ def get_ads_counts_repo():
     query = {'status': {'$in': [True, 'True']}}
     return mongo.db.ads.count_documents(query)
 
+def get_ads_deletes_counts_repo():
+    query = {'status': {'$in': [False, 'False']}}
+    return mongo.db.ads.count_documents(query)
+
+def get_ads_totales_counts_repo():
+    return mongo.db.ads.count_documents({})
+
 
 
 def get_adsById_repo(id):
