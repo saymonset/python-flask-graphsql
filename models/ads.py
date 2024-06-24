@@ -1,13 +1,15 @@
 import json
 import strawberry
 from typing import List
+from typing import Optional
 @strawberry.type
 class AdsModels:
     id: strawberry.ID = strawberry.UNSET
     title:str
     img:str
-    link:str
+    link:Optional[str]
     status:bool 
+     
 
 
 # import strawberry

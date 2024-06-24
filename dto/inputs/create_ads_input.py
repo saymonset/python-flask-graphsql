@@ -6,5 +6,5 @@ class CreateAdsInput:
     img:str
     link:str
     status:bool 
-    quantity: float
-    quantityUnits: Optional[str]
+    # quantity: float
+    #quantityUnits: Optional[str]

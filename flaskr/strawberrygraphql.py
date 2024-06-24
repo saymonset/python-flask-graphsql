@@ -154,12 +154,12 @@ class Mutation:
         return create_ads_GRAPHQL_service(input)
 
     @strawberry.mutation(name="updateAds", description="Update ads")
-    def update_AdsModels(self, input: UpdateAdsInput) -> AdsModels:
+    def updateAds(self, input: UpdateAdsInput) -> AdsModels:
         return update_ads_GRAPHQL_service(input)
 
     @strawberry.mutation(name="removeAds", description="Remove ads")
-    def remove_AdsModels(self, idAds: str) -> bool:
-        return delete_ads_GRAPHQL_service(idAds)
+    def remove_AdsModels(self, id: strawberry.ID) -> bool:
+        return delete_ads_GRAPHQL_service(id)
  
     
 schema = strawberry.Schema(query=Query, mutation=Mutation)

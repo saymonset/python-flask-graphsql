@@ -55,7 +55,7 @@ def create_ads_GRAPHQL_service(data:CreateAdsInput):
 
 def update_ads_GRAPHQL_service(data:UpdateAdsInput):
        # data['status'] = True
-        response = update_applyVaccine_repo(data.idAds, data)
+        response = update_applyVaccine_repo(data.id, data)
         print(response)
         return AdsModels(title=data.title, img=data.img, link=data.link, status=data.status)
 
@@ -64,6 +64,5 @@ def delete_ads_GRAPHQL_service(id:str):
         response = get_adsById_repo(id)
         #Lo puedes borrar , lo borramos
         responseII = delete_ads_repo(id)
-        print(responseII)
         return True
  
