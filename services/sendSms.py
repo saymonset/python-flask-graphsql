@@ -2,7 +2,7 @@ from flask import request, Response, jsonify
 from bson import json_util, ObjectId
 from bson.json_util import dumps
 import json
-
+from models.users import UserModels
 from config.mongodb  import   mongo
 import random
 import os
@@ -91,6 +91,21 @@ def sendSms_service(data):
                 'last_code': rand_num,
                 'status': 'unverified'
             }
+            # usermodel = UserModels(phone=phone, 
+            #            last_code=rand_num, 
+            #            token='',
+            #            birth = '',
+            #            ci = '',
+            #            city = '',
+            #            email='',
+            #            gender='',
+            #            lastname='',
+            #            name='',
+            #            password='',
+            #            state='',
+            #            status='unverified',
+            #            roles = []);
+                    
             crear_users_repo(user)
             #users.insert_one(user).inserted_id
             response = {

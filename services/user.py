@@ -8,6 +8,7 @@ from repository.user import   update_status_user_repo, get_user_repo, get_user_r
 from repository.dependent import    checkUserDependent, crear_dependents_repo
 from helps.utils import validar_object_id
 from validators.utils import calcular_edad_y_es_nino
+from models.users import UserModels
 
 
 
@@ -29,7 +30,7 @@ def create_user_service(user_data, usuario):
     user_data['user_id'] = user_id
 
     is_children, age, days_birth = calcular_edad_y_es_nino(user_data["birth"])
-
+    
     #birthDateStr = birthDate.strftime("%Y-%m-%dT%H:%M:%S.%f")
     user_data['isChildren'] = is_children
     user_data['age'] = age

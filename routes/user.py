@@ -48,6 +48,7 @@ class getuserswgger(Resource):
         usuario = result["usuario"]
         # Obtener los datos del objeto enviado en la solicitud
         data = ns_users.payload
+       
         # Validamos name
         if usuario is None:
             # El campo está vacío
@@ -89,6 +90,7 @@ class getuserswgger(Resource):
         result = get_gender_repo(data["gender_id"])
         if result is None or "error" in result:
             return {"error": "El id no es una instancia de la clase GenderModels", 'resp':False, 'statusCode':'badGender'}
+        
         return create_user_service(data, usuario)
 
 

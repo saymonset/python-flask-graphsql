@@ -5,6 +5,7 @@ from config.mongodb import mongo
 from flask import Flask
 from strawberry.flask.views import  GraphQLView
 from graphql_l.ads.strawberrygraphql import schemaAds  
+from graphql_l.user.strawberrygraphql import userSchema  
 from flask_jwt_extended import JWTManager
 from routes import blueprint
 
@@ -65,5 +66,6 @@ def create_app(test_config=None):
     
     # Agrega la vista de GraphQL a tu aplicación Flask
     app.add_url_rule("/graphqlAds" , view_func=GraphQLView.as_view( "graphqlAds" , schema=schemaAds))
+    app.add_url_rule("/userGraphql" , view_func=GraphQLView.as_view( "userGraphql" , schema=userSchema))
     CORS(app, resources={r"/*": {"origins": "*"}})  # Ajusta según tus rutas y necesidades
     return app
