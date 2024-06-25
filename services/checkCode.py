@@ -42,7 +42,10 @@ def check_CI_service(data):
     phone = data['phone']
     code = data['code']
     user = find_one_repo({"phone": phone})
-    if user:
+    print('-------ff---------------')
+    print(user['phone'])
+    print('-------hhh---------------')
+    if user and 'ci' in user:
         if (code) == (user['ci']):
             now = datetime.utcnow()
             token = create_access_token(identity=str(user['_id']),expires_delta=False)
@@ -72,7 +75,7 @@ def update_password_service(data):
     phone = data['phone']
     code = data['code']
     user = find_one_repo({"phone": phone})
-    if user:
+    if user and 'ci' in user:
         if (code) == (user['ci']):
            
             update_status_user_repo(user['_id'], {'status': 'verified', 'password': pbkdf2_sha256.hash(data['password'])} )

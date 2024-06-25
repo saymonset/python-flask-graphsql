@@ -32,44 +32,44 @@ def find_one_repo(query):
     return mongo.db.users.find_one(query)
 
 def update_status_user_repo(id, obj:UserModels):
-    data = {
-        "phone": obj.phone,
-        "last_code": obj.last_code,
-        "token": obj.token,
-        "birth": obj.birth,
-        "ci": obj.ci,
-        "city": obj.city,
-        "email": obj.email,
-        "gender": obj.gender,
-        "lastname": obj.lastname,
-        "name":obj.name,
-        "password": obj.password,
-        "state": obj.state,
-        "status": obj.status
-    }
-    return mongo.db.users.update_one({"_id":{'$eq': ObjectId(id)}}, {"$set": data})
+    # data = {
+    #     "phone": obj.phone,
+    #     "last_code": obj.last_code,
+    #     "token": obj.token,
+    #     "birth": obj.birth,
+    #     "ci": obj.ci,
+    #     "city": obj.city,
+    #     "email": obj.email,
+    #     "gender": obj.gender,
+    #     "lastname": obj.lastname,
+    #     "name":obj.name,
+    #     "password": obj.password,
+    #     "state": obj.state,
+    #     "status": obj.status
+    # }
+    return mongo.db.users.update_one({"_id":{'$eq': ObjectId(id)}}, {"$set": obj})
 
 
 def update_user_repo(id,  obj:UserModels):
-    data = {
-        "phone": obj.phone,
-        "last_code": obj.last_code,
-        "token": obj.token,
-        "birth": obj.birth,
-        "ci": obj.ci,
-        "city": obj.city,
-        "email": obj.email,
-        "gender": obj.gender,
-        "lastname": obj.lastname,
-        "name":obj.name,
-        "password": obj.password,
-        "state": obj.state,
-        "status": obj.status
-    }
+    # data = {
+    #     "phone": obj.phone,
+    #     "last_code": obj.last_code,
+    #     "token": obj.token,
+    #     "birth": obj.birth,
+    #     "ci": obj.ci,
+    #     "city": obj.city,
+    #     "email": obj.email,
+    #     "gender": obj.gender,
+    #     "lastname": obj.lastname,
+    #     "name":obj.name,
+    #     "password": obj.password,
+    #     "state": obj.state,
+    #     "status": obj.status
+    # }
     if validar_object_id(id):
         # La cadena es un ObjectId válido
         # Realiza las operaciones necesarias
-        return mongo.db.users.update_one({"_id":{'$eq': ObjectId(id)}}, {"$set": data})
+        return mongo.db.users.update_one({"_id":{'$eq': ObjectId(id)}}, {"$set": obj})
     else:
         # Maneja el error o muestra un mensaje de error
         result = {
