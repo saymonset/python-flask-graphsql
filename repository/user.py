@@ -65,6 +65,7 @@ def get_user_repo(id):
          }
         return result
 def crear_users_repo(obj:UserModels):
+    obj['isActive'] = True
     return mongo.db.users.insert_one(obj).inserted_id
     #return mongo.db.users.insert_one(obj.__dict__)
 
@@ -96,8 +97,13 @@ def get_users_status_repo(statusArgs: StatusASrgs):
     if statusArgs is None:
         return mongo.db.users.find() 
     else :
-        query = {'status': {'$in': [ statusArgs.status]}}
-        return mongo.db.users.find(query) 
+        #query = {'status': {'$in': [ statusArgs.status]}}
+        if statusArgs.status is True:
+            query = {'isActive': {'$in': [True, 'True']}}
+            return mongo.db.users.find(query) 
+        else:
+            query = {'isActive': {'$in': [False, 'False']}}
+            return mongo.db.users.find(query) 
 
 def get_user_repo_list(limite:int, desde:int):
     query = {'status': {'$in': [True, 'True']}}

@@ -17,6 +17,7 @@ class UserModels:
     password:str = strawberry.UNSET
     state:str = strawberry.UNSET
     status:str = strawberry.UNSET
+    isActive:bool = strawberry.UNSET
     roles: List[str] = strawberry.UNSET
    
    

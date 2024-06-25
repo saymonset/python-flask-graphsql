@@ -3,7 +3,7 @@ from typing import List, Optional
 
 import random
 from typing import Optional
-from services.user import get_users_GRPHQL_Statusservice
+from services.user import get_users_GRPHQL_Statusservice, get_userbyIdRaw_service
 from services.ads_graphql_srv import get_adsList_GRPHQLservice, get_adsList_GRPHQL_Statusservice, get_adsbyId_GRPHQL_service, \
 delete_ads_GRAPHQL_service, create_ads_GRAPHQL_service, update_ads_GRAPHQL_service, get_totalads_GRPHQLservice, \
 get_totalActivosads_GRPHQLservice, get_totalDeletessads_GRPHQLservice
@@ -26,21 +26,28 @@ class Query:
         objs_list = []  # Inicializa una lista vacía para los objetos modificados 
 
         for d in data:  # Itera sobre los resultados directamente, sin necesidad de convertir a lista
+            dependent = get_userbyIdRaw_service(str(d.get('_id')))
+            name = dependent['name']
+            email = dependent['email']
+            lastname = dependent['lastname']
+            genderId = dependent['genderId']
+            birth = dependent['birth']
             user_data = {
                 'id': d.get('_id'),
                 'phone': d.get('phone'),
                 'lastCode': d.get('lastCode'),
                 'token': d.get('token'),
-                'birth': d.get('birth'),
+                'birth':birth,
                 'ci': d.get('ci'),
                 'city': d.get('city'),
-                'email': d.get('email'),
-                'genderId': d.get('genderId'),
-                'lastname': d.get('lastname'),
-                'name': d.get('name'),
+                'email':email,
+                'genderId': genderId,
+                'lastname': lastname,
+                'name': name,
                 'password': d.get('password'),
                 'state': d.get('state'),
                 'roles': d.get('roles'),
+                'isActive': d.get('isActive'),
                 'status': d.get('status')
             }
             # Elimina las entradas con valor None

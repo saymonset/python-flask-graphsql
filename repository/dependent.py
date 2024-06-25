@@ -15,6 +15,10 @@ import re
  
 def checkUserDependent(query):     
     #La primera ves se usa la colletion users y no dependents
+   
+    print(query)
+    print( mongo.db.dependents.find_one(query))
+    print('------------qie pasa----X-------')
     return mongo.db.dependents.find_one(query)
 
  

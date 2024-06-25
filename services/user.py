@@ -101,6 +101,12 @@ def get_userbyId_service_data(id):
         return response_data 
 
 # """Obtener una objeto"""
+def get_userbyIdRaw_service(id):
+    dependent_is_user = checkUserDependent({'isUser': True, "user_id":id})
+    return dependent_is_user
+
+    
+# """Obtener una objeto"""
 def get_userbyId_service(id):
     data = get_user_repo(id)
     dependent_is_user = checkUserDependent({'isUser': True, "user_id":ObjectId(id) })
