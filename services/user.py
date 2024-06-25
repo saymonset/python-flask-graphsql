@@ -4,12 +4,13 @@ from bson.json_util import dumps
 import json
 from passlib.hash import pbkdf2_sha256
 from config.mongodb  import   mongo
-from repository.user import   update_status_user_repo, get_user_repo, get_user_repo_list, get_user_counts_repo, delete_user_repo, update_user_repo
+from repository.user import   update_status_user_repo, get_user_repo, get_user_repo_list, get_user_counts_repo, delete_user_repo, update_user_repo, \
+get_users_status_repo
 from repository.dependent import    checkUserDependent, crear_dependents_repo
 from helps.utils import validar_object_id
 from validators.utils import calcular_edad_y_es_nino
 from models.users import UserModels
-
+from dto.args.status_args import  StatusASrgs
 
 
 
@@ -17,15 +18,15 @@ from models.users import UserModels
 
 
 def create_user_service(user_data, usuario):
-    user_id = usuario['_id']
+    user_id = str(usuario['_id'])  # Convert ObjectId to string
     ci = user_data['ci']
     city = user_data['city']
     state = user_data['state']
     password = pbkdf2_sha256.hash(user_data['password'])
     del user_data['password']
     del user_data['ci']
-    # del user_data['city']
-    # del user_data['state']
+    del user_data['city']
+    del user_data['state']
     user_data['isUser'] = True
     user_data['user_id'] = user_id
 
@@ -46,12 +47,17 @@ def create_user_service(user_data, usuario):
       message = "User already exist";
       
     response = {
+        
         'statusCode': 201,
         'message': message,
+        'user_id': user_id,
         "resp":True
     }
     return response
 
+"""Obtiene las users"""
+def get_users_GRPHQL_Statusservice(statusArgs: StatusASrgs):
+    return get_users_status_repo(statusArgs)
 
 def get_userList_service(limite, desde):
     limite = int(limite)

@@ -59,12 +59,12 @@ def sendSms_service(data):
             if user['status'] == 'unverified':
                 result = sendSms_phone(phone, rand_num)
                 if not bool(result["resp"]):  return result 
-                data = {'last_code': rand_num}
+                data = {'lastCode': rand_num}
                 update_status_user_repo(user['_id'], data)
                 response = {
                     "resp":True,
                     'statusCode': 201,
-                    'last_code':rand_num,
+                    'lastCode':rand_num,
                     'message': "Code was sent successfully."
                 }
             else:
@@ -72,12 +72,12 @@ def sendSms_service(data):
                     result = sendSms_phone(phone, rand_num)
                     if not bool(result["resp"]):  return result 
                     
-                    data = {'last_code': rand_num}
+                    data = {'lastCode': rand_num}
                     update_status_user_repo(user['_id'], data)
                     response = {
                         "resp":True,
                         'statusCode': 201,
-                         'last_code':rand_num,
+                         'lastCode':rand_num,
                         'message': "Code was sent successfully."
                     }
         else:    
@@ -88,29 +88,16 @@ def sendSms_service(data):
             # The `user` variable is used to store the result of the `get_phone_in_users_repo` function, which retrieves user data from the repository based on the provided phone number.
             user = {
                 'phone': phone,
-                'last_code': rand_num,
+                'lastCode': rand_num,
                 'status': 'unverified'
             }
-            # usermodel = UserModels(phone=phone, 
-            #            last_code=rand_num, 
-            #            token='',
-            #            birth = '',
-            #            ci = '',
-            #            city = '',
-            #            email='',
-            #            gender='',
-            #            lastname='',
-            #            name='',
-            #            password='',
-            #            state='',
-            #            status='unverified',
-            #            roles = []);
+        
                     
             crear_users_repo(user)
             #users.insert_one(user).inserted_id
             response = {
                 "resp":True,
-                 'last_code':rand_num,
+                 'lastCode':rand_num,
                 'statusCode': 201,
                 'message': 'Code was sent successfully.'
             }

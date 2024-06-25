@@ -4,7 +4,7 @@ from datetime import datetime
 class DependentModels:
     def __init__(self, 
                  phone:str, 
-                 last_code:str,
+                 lastCode:str,
                  status:bool,
                  token:str,
                  birth:str,
@@ -18,7 +18,7 @@ class DependentModels:
                  state:str
                  ):
         self.phone = phone
-        self.last_code = last_code
+        self.lastCode = lastCode
         self.status = status
         self.token=token
         self.birth=birth

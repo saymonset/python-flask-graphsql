@@ -9,6 +9,7 @@ from models.doctors import  DoctorsModels
 from helps.utils import validar_object_id
 from passlib.hash import pbkdf2_sha256
 from repository.dependent import    checkUserDependent
+from dto.args.status_args import  StatusASrgs
  
 
 
@@ -32,40 +33,10 @@ def find_one_repo(query):
     return mongo.db.users.find_one(query)
 
 def update_status_user_repo(id, obj:UserModels):
-    # data = {
-    #     "phone": obj.phone,
-    #     "last_code": obj.last_code,
-    #     "token": obj.token,
-    #     "birth": obj.birth,
-    #     "ci": obj.ci,
-    #     "city": obj.city,
-    #     "email": obj.email,
-    #     "gender": obj.gender,
-    #     "lastname": obj.lastname,
-    #     "name":obj.name,
-    #     "password": obj.password,
-    #     "state": obj.state,
-    #     "status": obj.status
-    # }
     return mongo.db.users.update_one({"_id":{'$eq': ObjectId(id)}}, {"$set": obj})
 
 
 def update_user_repo(id,  obj:UserModels):
-    # data = {
-    #     "phone": obj.phone,
-    #     "last_code": obj.last_code,
-    #     "token": obj.token,
-    #     "birth": obj.birth,
-    #     "ci": obj.ci,
-    #     "city": obj.city,
-    #     "email": obj.email,
-    #     "gender": obj.gender,
-    #     "lastname": obj.lastname,
-    #     "name":obj.name,
-    #     "password": obj.password,
-    #     "state": obj.state,
-    #     "status": obj.status
-    # }
     if validar_object_id(id):
         # La cadena es un ObjectId válido
         # Realiza las operaciones necesarias
@@ -94,25 +65,6 @@ def get_user_repo(id):
          }
         return result
 def crear_users_repo(obj:UserModels):
-    # print('--------0--------')
-    # print(obj)
-    # data = {
-    #     "phone": obj.phone,
-    #     "last_code": obj.last_code,
-    #     "token": obj.token,
-    #     "birth": obj.birth,
-    #     "ci": obj.ci,
-    #     "city": obj.city,
-    #     "email": obj.email,
-    #     "gender": obj.gender,
-    #     "lastname": obj.lastname,
-    #     "name":obj.name,
-    #     "password": obj.password,
-    #     "state": obj.state,
-    #     "status": obj.status
-    # }
-    # print('--------1--------')
-    # print(data)
     return mongo.db.users.insert_one(obj).inserted_id
     #return mongo.db.users.insert_one(obj.__dict__)
 
@@ -140,6 +92,13 @@ def get_phone_in_users_repo(phone):
             
 
        
+def get_users_status_repo(statusArgs: StatusASrgs):
+    if statusArgs is None:
+        return mongo.db.users.find() 
+    else :
+        query = {'status': {'$in': [ statusArgs.status]}}
+        #return mongo.db.users.find(query) 
+        return mongo.db.users.find() 
 
 def get_user_repo_list(limite:int, desde:int):
     query = {'status': {'$in': [True, 'True']}}
@@ -185,8 +144,6 @@ def isValidBdEmail(data):
                     "email":"El email existe en bd"}
     return {"resp":True}
  
- # return {"error": "El email existe en bd", 'resp':False, 'statusCode':'badExistEmail'}    
-    #
 
 
 

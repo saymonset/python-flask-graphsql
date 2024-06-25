@@ -11,7 +11,7 @@ def checkCode_service(data):
     code = data['code']
     user = find_one_repo({"phone": phone})
     if user:
-        if int(code) == int(user['last_code']):
+        if int(code) == int(user['lastCode']):
             now = datetime.utcnow()
             #token = jwt.encode({'_id':str(user['_id']), 'exp': exp_time}, secret, algorithm="HS256")  	
             token = create_access_token(identity=str(user['_id']),expires_delta=False)

@@ -24,7 +24,7 @@ model = ns_dependents.model('dependent', {
     'lastname': fields.String(required=True, description='Lastname of dependet'),
     'email': fields.String(required=False, description='Email of dependet'),
     'phone': fields.String(required=False, description='Phone of dependet'),
-    'gender_id': fields.String(required=True, description='Gender of dependet'),
+    'genderId': fields.String(required=True, description='Gender of dependet'),
     'birth': fields.String(required=True, description='Birth of dependet'),
     'relationship_id': fields.String(required=True, description='relation ship of dependet'),
 })
@@ -114,13 +114,13 @@ class postauxDependentswgger(Resource):
            }
  
          #Validamos genero
-        result = get_gender_repo(data["gender_id"])
+        result = get_gender_repo(data["genderId"])
         if result is None or "error" in result:
            return  {  "error":False,
                      "resp":False,
                      "statusCode": "badMissingGender_id",
-                     "ValueError": "El gender_id no es una instancia de la clase GenderModels",
-                     "message":"El gender_id no es una instancia de la clase GenderModels",
+                     "ValueError": "El genderId no es una instancia de la clase GenderModels",
+                     "message":"El genderId no es una instancia de la clase GenderModels",
            }
         
            #Validamos relacion

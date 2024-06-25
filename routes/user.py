@@ -28,7 +28,7 @@ model = ns_users.model(
         "state": fields.String(required=True, description="State where users lives"),
         "city": fields.String(required=True, description="City where user lives"),
         "birth": fields.String(required=True, description="Birth of users"),
-        "gender_id": fields.String(required=True, description="Gender of users"),
+        "genderId": fields.String(required=True, description="Gender of users"),
     },
 )
 
@@ -63,7 +63,7 @@ class getuserswgger(Resource):
         if data["ci"] is None or len(data["ci"]) == 0:
             # El campo está vacío
             return {"error": "Missing ci" , 'resp':False, 'statusCode':'badMissingCi'}
-        if data["gender_id"] is None or len(data["gender_id"]) == 0:
+        if data["genderId"] is None or len(data["genderId"]) == 0:
             # El campo está vacío
             return {"error": "Missing gender_id" , 'resp':False, 'statusCode':'badMissingGender_id'}
         if data["birth"] is None or len(data["birth"]) == 0:
@@ -87,7 +87,7 @@ class getuserswgger(Resource):
         result = isValidBdEmail(data)
         if not bool(result["resp"]):  return result 
         # Validamos genero
-        result = get_gender_repo(data["gender_id"])
+        result = get_gender_repo(data["genderId"])
         if result is None or "error" in result:
             return {"error": "El id no es una instancia de la clase GenderModels", 'resp':False, 'statusCode':'badGender'}
         
@@ -127,7 +127,7 @@ class getUserById(Resource):
         # Obtener los datos del objeto enviado en la solicitud
         data = ns_users.payload
         # Validamos genero
-        result = get_gender_repo(data["gender_id"])
+        result = get_gender_repo(data["genderId"])
         if result is None or "error" in result:
             return {"error": "El id no es una instancia de la clase GenderModels"}
 
