@@ -97,8 +97,7 @@ def get_users_status_repo(statusArgs: StatusASrgs):
         return mongo.db.users.find() 
     else :
         query = {'status': {'$in': [ statusArgs.status]}}
-        #return mongo.db.users.find(query) 
-        return mongo.db.users.find() 
+        return mongo.db.users.find(query) 
 
 def get_user_repo_list(limite:int, desde:int):
     query = {'status': {'$in': [True, 'True']}}
