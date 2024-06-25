@@ -16,6 +16,7 @@ from repository.user import   crear_users_repo, update_status_user_repo, get_pho
 
 
 """Registro de objetos"""
+ 
 
 def get_phone_in_users_service(phone):
    
@@ -43,6 +44,69 @@ def get_phone_in_users_service(phone):
                 "message": "El telefono no existe",
             }
 
+ 
+
+def sendSms_graphql_service(data):
+    #Tomamos el telefono que se envia
+    phone = data.get("phone")
+    if phone:
+        rand_num = random.randint(99999,999999)
+        user =  get_phone_in_users_repo(phone)
+        if user:
+            #Si no tiene status el usuqariop, se coloca como unverified su status
+            if 'status' not in user:
+                data = {'status': 'unverified'}
+                update_status_user_repo(user['_id'], data)
+                user =  get_phone_in_users_repo(phone)
+             #Si tiene como statu verified, se le manda de nuevo su codigo de tlf   
+            if user['status'] == 'unverified':
+                result = sendSms_phone(phone, rand_num)
+                if not bool(result["resp"]):  return result 
+                data = {'lastCode': rand_num}
+                update_status_user_repo(user['_id'], data)
+                response = {
+                    "resp":True,
+                    'statusCode': 201,
+                    'lastCode':rand_num,
+                    'message': "Code was sent successfully."
+                }
+            else:
+                    #El usuqario pide que se le reenvie erl codigo nuevo porque ya esta verificado
+                    result = sendSms_phone(phone, rand_num)
+                    if not bool(result["resp"]):  return result 
+                    
+                    data = {'lastCode': rand_num}
+                    update_status_user_repo(user['_id'], data)
+                    response = {
+                        "resp":True,
+                        'statusCode': 201,
+                         'lastCode':rand_num,
+                        'message': "Code was sent successfully."
+                    }
+        else:    
+            #Es primera ves refgistradose en el telefono
+            result = sendSms_phone(phone, rand_num)
+            if not bool(result["resp"]):  return result 
+            
+            # The `user` variable is used to store the result of the `get_phone_in_users_repo` function, which retrieves user data from the repository based on the provided phone number.
+            user = {
+                'phone': phone,
+                'lastCode': rand_num,
+                'status': 'unverified'
+            }
+        
+                    
+            crear_users_repo(user)
+            #users.insert_one(user).inserted_id
+            response = {
+                "resp":True,
+                 'lastCode':rand_num,
+                'statusCode': 201,
+                'message': 'Code was sent successfully.'
+            }
+        return response
+    else:
+        return "Invalid payload", 400
 def sendSms_service(data):
     #Tomamos el telefono que se envia
     phone = data.get("phone")
@@ -122,19 +186,23 @@ def sendSms_phone(phone, rand_num):
                         to=phone
                     )
         resp = {"resp":True,
-         "statusCode": 201,
+                "statusCode": 201,
+                "lastCode": '',
+                "message": " successfully."
                }
         return resp
     except Exception as e:
 	
         resp =    {"resp":False,
                     "statusCode": 501,
-                    "error":"Hubo un error al mandar el mensaje, por favor intente nuevamente."}
+                    "lastCode":'',
+                    "error":"Hubo un error al mandar el mensaje, por favor intente nuevamente.",
+                    "message":"Hubo un error al mandar el mensaje, por favor intente nuevamente."}
                     #CUANDO FUNCIONE TWILIO, COMENTAR EL BLOQUE SIGUIENTE
         resp =    {"resp":True,
                     "statusCode": 501,
-                    "error":"Temporal envio de sms. Esta hardoCode!"}
-        print(str(e))
-    
+                    "lastCode":'',
+                    "error":"Temporal envio de sms. Esta hardoCode!",
+                    "message":"Temporal envio de sms. Esta hardoCode!"}
         return resp
  
