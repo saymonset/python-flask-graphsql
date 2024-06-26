@@ -5,7 +5,9 @@ import random
 from typing import Optional
 from services.user import get_users_GRPHQL_Statusservice, get_userbyIdRaw_service
 from services.sendSms import sendSms_graphql_service
+from services.checkCode import checkCode_service_graphql
 from dto.inputs.sendPhone_input import SendPhoneInput
+from dto.inputs.checkCode_input import CheckCodeInput
 from dto.types.sendPhoneResponse_type import SendPhoneResponse
 from dto.args.status_args import  StatusASrgs
  
@@ -66,12 +68,17 @@ class Query:
 
 @strawberry.type
 class Mutation:
-    @strawberry.mutation(name="sendPhone", description="Send a phone")
-    def sendPhone(self, input: SendPhoneInput) -> SendPhoneResponse:
+    @strawberry.mutation(name="sendPhoneSms", description="Send a sms phone")
+    def sendPhoneSms(self, input: SendPhoneInput) -> SendPhoneResponse:
         resul = sendSms_graphql_service(input)
         response = {k: v for k, v in resul.items() if v is not None}
         return SendPhoneResponse(**response)
 
-     
-    
+    @strawberry.mutation(name="checkCode", description="CheckCode sent from a sms phone")
+    def checkCode(self, input: CheckCodeInput) -> SendPhoneResponse:
+        resul = checkCode_service_graphql(input)
+        response = {k: v for k, v in resul.items() if v is not None}
+        return SendPhoneResponse(**response)
+
+
 userSchema = strawberry.Schema(query=Query, mutation=Mutation)
