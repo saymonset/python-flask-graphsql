@@ -4,6 +4,7 @@ from repository.user import update_status_user_repo, find_one_repo
 from passlib.hash import pbkdf2_sha256
 from dto.inputs.checkCode_input import CheckCodeInput
 from dto.inputs.passwordRecoveryWithCedula_input import PasswordRecoveryWithCedulaInput
+from dto.inputs.passwordUpdateWithCedula_input import PasswordUpdateWithCedulaInput
 
 """Registro de objetos"""
 def checkCode_service_graphql(data:CheckCodeInput):
@@ -120,6 +121,34 @@ def check_CI_service(data):
                  'resp':False,
                 'statusCode': 401,
                 'message' : "Code was incorrect. Try again or request a new code"
+            }
+    else:
+        response = {
+             'resp':False,
+            'statusCode': 404,
+            'message' : "Error validating user. Please try again."
+        }
+    return response
+
+"""Update password de objetos"""
+def update_password_service_graphql(data:PasswordUpdateWithCedulaInput):
+    phone = data.phone
+    code = data.ci
+    user = find_one_repo({"phone": phone})
+    if user and 'ci' in user:
+        if (code) == (user['ci']):
+           
+            update_status_user_repo(user['_id'], {'status': 'verified', 'password': pbkdf2_sha256.hash(data.password)} )
+            response = {
+                'resp':True,
+                'statusCode': 200,
+                'message' : "Password updated successfully", 
+            }
+        else:
+            response = {
+                 'resp':False,
+                'statusCode': 401,
+                'message' : "Ci was incorrect. Try again or request a new ci"
             }
     else:
         response = {

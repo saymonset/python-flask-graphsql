@@ -11,6 +11,7 @@ from services.user import create_user_service_graphql
 from dto.inputs.sendPhone_input import SendPhoneInput
 from dto.inputs.checkCode_input import CheckCodeInput
 from dto.inputs.passwordRecoveryWithCedula_input import PasswordRecoveryWithCedulaInput
+from dto.inputs.passwordUpdateWithCedula_input import PasswordUpdateWithCedulaInput
 from dto.inputs.signup_input import SignUpInput
 from dto.types.sendPhoneResponse_type import SendPhoneResponse
 from dto.args.status_args import  StatusASrgs
@@ -104,6 +105,15 @@ class Mutation:
 
     @strawberry.mutation(name="passwordRecovery", description="Password Recovery")
     def passwordRecovery(self, input: PasswordRecoveryWithCedulaInput) -> SendPhoneResponse:
+        #print(user_identity)
+        # Assuming create_user_service_graphql returns a dictionary
+        resul = check_CI_service_graphql(input)
+        response = {k: v for k, v in resul.items() if v is not None}
+        # Ensure that the attributes match the ones defined in SendPhoneResponse
+        return SendPhoneResponse(**response)
+
+    @strawberry.mutation(name="passwordUpdate", description="Password Update")
+    def passwordUpdate(self, input: PasswordUpdateWithCedulaInput) -> SendPhoneResponse:
         #print(user_identity)
         # Assuming create_user_service_graphql returns a dictionary
         resul = check_CI_service_graphql(input)
