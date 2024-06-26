@@ -27,7 +27,7 @@ class getCheckCodeswgger(Resource):
 
         result =  isValidCode(code) 
         if not bool(result["resp"]):  return result 
-
+       
         return checkCode_service(data) if bool(result["resp"])  else result 
 
 
@@ -48,6 +48,7 @@ class getForgetpassword(Resource):
         if not bool(result["resp"]):  return result 
 
         #return {"statusCode": 400, "resp": True, "message": "El mero"}
+       
         return check_CI_service(data) if bool(result["resp"])  else result 
 
 @ns_checkCode.route('/passwordUpdate', methods = [ 'POST' ])
