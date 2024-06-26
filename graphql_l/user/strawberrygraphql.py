@@ -9,12 +9,15 @@ from services.sendSms import sendSms_graphql_service
 from services.checkCode import checkCode_service_graphql, check_CI_service_graphql, \
 update_password_service_graphql
 from services.user import create_user_service_graphql
+from services.login import loginGraphql
 from dto.inputs.sendPhone_input import SendPhoneInput
 from dto.inputs.checkCode_input import CheckCodeInput
+from dto.inputs.loginI_input import LoginInput
 from dto.inputs.passwordRecoveryWithCedula_input import PasswordRecoveryWithCedulaInput
 from dto.inputs.passwordUpdateWithCedula_input import PasswordUpdateWithCedulaInput
 from dto.inputs.signup_input import SignUpInput
 from dto.types.sendPhoneResponse_type import SendPhoneResponse
+from dto.types.loginResponse import LoginResponse, Usuario
 from dto.args.status_args import  StatusASrgs
 from typing import Any  # Importa el tipo de datos Any
 from starlette.requests import Request  # Importa el tipo de datos del objeto Request
@@ -121,6 +124,32 @@ class Mutation:
         response = {k: v for k, v in resul.items() if v is not None}
         # Ensure that the attributes match the ones defined in SendPhoneResponse
         return SendPhoneResponse(**response)
+
+    @strawberry.mutation(name="login", description="SignIn")
+    def login(self, input: LoginInput) -> LoginResponse:
+        #print(user_identity)
+        # Assuming create_user_service_graphql returns a dictionary
+        result = loginGraphql(input)
+        user =  result['usuario']
+        userResponse = {k: v for k, v in user.items() if v is not None}
+        # Assuming userResponse contains the necessary attributes for Usuario
+        #usuario_id = 
+        usuario = Usuario(
+            id=userResponse['_id']['$oid'],
+            phone=userResponse['phone'],
+            lastCode=userResponse['lastCode'],
+            status=userResponse['status'],
+            isActive=userResponse['isActive'],
+            token=userResponse['token'],
+            ci=userResponse['ci'],
+            city=userResponse['city'],
+            password=userResponse['password'],
+            state=userResponse['state']
+        )
+        response = {k: v for k, v in result.items() if v is not None}
+        loginResponse = LoginResponse(**response)
+        loginResponse.usuario = usuario
+        return loginResponse
 
 
 userSchema = strawberry.Schema(query=Query, mutation=Mutation)
