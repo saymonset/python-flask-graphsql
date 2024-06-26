@@ -6,7 +6,8 @@ import random
 from typing import Optional
 from services.user import get_users_GRPHQL_Statusservice, get_userbyIdRaw_service
 from services.sendSms import sendSms_graphql_service
-from services.checkCode import checkCode_service_graphql, check_CI_service_graphql
+from services.checkCode import checkCode_service_graphql, check_CI_service_graphql, \
+update_password_service_graphql
 from services.user import create_user_service_graphql
 from dto.inputs.sendPhone_input import SendPhoneInput
 from dto.inputs.checkCode_input import CheckCodeInput
@@ -116,7 +117,7 @@ class Mutation:
     def passwordUpdate(self, input: PasswordUpdateWithCedulaInput) -> SendPhoneResponse:
         #print(user_identity)
         # Assuming create_user_service_graphql returns a dictionary
-        resul = check_CI_service_graphql(input)
+        resul = update_password_service_graphql(input)
         response = {k: v for k, v in resul.items() if v is not None}
         # Ensure that the attributes match the ones defined in SendPhoneResponse
         return SendPhoneResponse(**response)
