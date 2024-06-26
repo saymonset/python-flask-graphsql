@@ -11,10 +11,58 @@ from helps.utils import validar_object_id
 from validators.utils import calcular_edad_y_es_nino
 from models.users import UserModels
 from dto.args.status_args import  StatusASrgs
-
+from dto.inputs.signup_input import SignUpInput
+from dataclasses import asdict
+from helps.token import verifyToken
+from typing import Any
+from starlette.requests import Request  # Importa el tipo de datos del objeto Request
 
 
 """Registro de objetos"""
+def create_user_service_graphql(signUpInput: SignUpInput,  request: Request) -> dict:
+     #Del token obtenemos el  usuario
+    result = verifyToken(request)
+    if not bool(result["resp"]):
+        return result
+    usuario = result["usuario"]
+    user_id = str(usuario['_id'])  # Convert ObjectId to string
+    user_data = asdict(signUpInput)  # Convert SignUpInput to a dictionary
+    
+    ci = user_data['ci']
+    city = user_data['city']
+    state = user_data['state']
+    password = pbkdf2_sha256.hash(user_data['password'])
+    del user_data['password']
+    del user_data['ci']
+    del user_data['city']
+    del user_data['state']
+    user_data['isUser'] = True
+    user_data['user_id'] = user_id
+
+    is_children, age, days_birth = calcular_edad_y_es_nino(user_data["birth"])
+    
+    #birthDateStr = birthDate.strftime("%Y-%m-%dT%H:%M:%S.%f")
+    user_data['isChildren'] = is_children
+    user_data['age'] = age
+    user_data['days_birth'] = days_birth
+    
+    message = ''
+    #Chequeamos si esta registrado en dependent y esel usuario principal
+    if checkUserDependent({'user_id': user_id, 'isUser': True}) is None:
+      crear_dependents_repo(user_data)
+      update_status_user_repo(user_id, {'password': password, 'ci': ci, 'city': city, 'state': state} )
+      message = f"user with ID {user_id} was created successfully"
+    else:
+      message = "User already exist";
+      
+    response = {
+        
+        'statusCode': 201,
+        'message': message,
+        'user_id': user_id,
+        "resp":True
+    }
+    return response
 
 
 def create_user_service(user_data, usuario):

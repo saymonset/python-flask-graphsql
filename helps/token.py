@@ -19,10 +19,13 @@ def verifyToken(request):
     The `verifyToken` function checks if a token is valid and not blacklisted, and generates a policy
     document for authorization.
     """
+     
+   
     token = request.headers.get('Authorization')
+     
     if token is None or "Bearer" not in token:
        
-        return {'Token': False,'usuario':'unauthorized', 'resp':False}
+        return {'Token': False,'usuario':'unauthorized', 'resp':False,'statusCode':401, 'message': 'unauthorized'}
     try:
       userId = get_jwt_identity()
       if (userId):
@@ -30,11 +33,11 @@ def verifyToken(request):
         usuario = find_one_repo(query)
         
         if usuario is not None:
-            return {'Token': True,  'usuario':usuario, 'resp':True}
+            return {'token': True,  'usuario':usuario, 'resp':True, 'message': 'success'}
         else:
-            return {'Token': False, 'error':'Token no es valido  ', 'resp':False}
+            return {'token': False, 'error':'token no es valido  ', 'resp':False,'statusCode':401, 'message': 'token no es valido'}
       else:
-        return {'Token': False,'usuario':'unauthorized', 'resp':False}
+        return {'token': False,'usuario':'unauthorized', 'resp':False, 'statusCode':401, 'message': 'unauthorized'}
     except Exception as e:
             print( e)
-            return {'error': 'Invalid token', 'resp':False}
+            return {'error': 'Invalid token', 'resp':False, 'statusCode':401, 'message': 'Invalid token'}

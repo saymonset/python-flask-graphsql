@@ -1,15 +1,23 @@
 import strawberry
 from typing import List, Optional
+from flask_jwt_extended import jwt_required, get_jwt_identity
 
 import random
 from typing import Optional
 from services.user import get_users_GRPHQL_Statusservice, get_userbyIdRaw_service
 from services.sendSms import sendSms_graphql_service
 from services.checkCode import checkCode_service_graphql
+from services.user import create_user_service_graphql
 from dto.inputs.sendPhone_input import SendPhoneInput
 from dto.inputs.checkCode_input import CheckCodeInput
+from dto.inputs.signup_input import SignUpInput
 from dto.types.sendPhoneResponse_type import SendPhoneResponse
 from dto.args.status_args import  StatusASrgs
+from typing import Any  # Importa el tipo de datos Any
+from starlette.requests import Request  # Importa el tipo de datos del objeto Request
+
+# Resto de tu código
+
  
  
 from models.users import UserModels
@@ -78,6 +86,19 @@ class Mutation:
     def checkCode(self, input: CheckCodeInput) -> SendPhoneResponse:
         resul = checkCode_service_graphql(input)
         response = {k: v for k, v in resul.items() if v is not None}
+        return SendPhoneResponse(**response)
+
+    @strawberry.mutation(name="signUp", description="signUp user")
+    @jwt_required()  # Enforce JWT authentication check
+    def signUp(self, input: SignUpInput, info: strawberry.Info) -> SendPhoneResponse:
+        # Ensure that the user is authenticated before proceeding
+        # Access the user identity from the JWT token if needed
+        user_identity = get_jwt_identity()
+        #print(user_identity)
+        # Assuming create_user_service_graphql returns a dictionary
+        resul = create_user_service_graphql(input, info.context['request'])
+        response = {k: v for k, v in resul.items() if v is not None}
+        # Ensure that the attributes match the ones defined in SendPhoneResponse
         return SendPhoneResponse(**response)
 
 
